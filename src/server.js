@@ -1,5 +1,7 @@
 import express from 'express';
+import dotenv from 'dotenv';
 
+dotenv.config();
 const app = express();
 
 app.use(express.json());
@@ -10,9 +12,14 @@ app.get('/', (req, res) => {
   });
 });
 
-app.listen(3000, () => {
-  console.log('Server is running on http://localhost:3000');
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
 });
+
+// app.listen(3000, () => {
+//   console.log('Server is running on http://localhost:3000');
+// });
 
 // import http, { request } from 'node:http';
 // import { json } from './utils/responses.js';
