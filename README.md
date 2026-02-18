@@ -29,3 +29,7 @@
 - `npm install -D <package-name>`
 - `npm uninstall <package-name>`
 - `npm update <package-name>`
+
+## Prisma commands
+
+- `npx prisma studio` : Opens Prisma Studio to browse database.
