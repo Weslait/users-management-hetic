@@ -11,3 +11,14 @@ export async function createUser(userData) {
     data: userData,
   });
 }
+
+export async function listUsers() {
+  return prisma.user.findMany();
+}
+
+export async function getUsersById(id) {
+  return prisma.user.findUnique({
+    where: { id },
+  });
+}
+// https://www.prisma.io/docs/orm/prisma-client/queries/crud#read
