@@ -110,8 +110,8 @@ export async function handleUpdateUser(req, res) {
     const results = validateUpdateUser(req.body);
     if (!results.ok) {
       return res.status(400).json({
-        message: 'Validation failed',
-        errors: results.errors,
+        error: 'Validation error',
+        fields: results.errors,
       });
     }
 

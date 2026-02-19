@@ -60,6 +60,10 @@ export function validateUpdateUser(userData) {
     else data.name = userData.name;
   }
 
+  if (Object.keys(data).length === 0) {
+    errors.body = 'Provide at least one field to update';
+  }
+
   return {
     ok: Object.keys(errors).length === 0,
     errors,
