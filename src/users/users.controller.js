@@ -1,4 +1,3 @@
-import { use } from 'react';
 import {
   createUser,
   findUserByEmail,
@@ -11,6 +10,11 @@ import { validateUser, validateUpdateUser } from './users.validation.js';
 
 export async function handleCreateUser(req, res) {
   try {
+    // Apply trim and lowercase
+    if (req.body.email) {
+      req.body.email = req.body.email.trim();
+      req.body.email = req.body.email.toLowerCase();
+    }
     const result = validateUser(req.body);
 
     if (!result.ok) {
@@ -25,6 +29,7 @@ export async function handleCreateUser(req, res) {
     if (existingUser) {
       return res.status(409).json({ message: 'User already exists' });
     }
+    //ici ?
     // Create user
     const user = await createUser(req.body);
     return res.status(201).json(user);
@@ -85,6 +90,12 @@ export async function handleDeleteUser(req, res) {
 
 export async function handleUpdateUser(req, res) {
   try {
+    // Apply trim and lowercase
+    if (req.body.email) {
+      req.body.email = req.body.email.trim();
+      req.body.email = req.body.email.toLowerCase();
+    }
+
     // Check if user ID exist
     const { id } = req.params;
     const { email } = req.body;
@@ -117,6 +128,27 @@ export async function handleUpdateUser(req, res) {
 
     const updatedUser = await updateUser(id, results.data);
     return res.status(200).json(updatedUser);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+
+export async function handleSearchByEmail(req, res) {
+  try {
+    const { email } = req.query;
+
+    if (!email) {
+      return res.status(400).json({
+        error: 'Email query parameter is required',
+      });
+    }
+
+    const user = await findUserByEmail(email);
+    if (user !== null) {
+      return res.status(200).json(user);
+    } else {
+      return res.status(404).json({ error: 'User not found' });
+    }
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
