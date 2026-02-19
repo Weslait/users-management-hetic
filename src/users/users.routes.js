@@ -7,6 +7,7 @@ import {
   handleUpdateUser,
   handleSearchByEmail,
   handleUserCount,
+  handleUpdatePassword,
 } from './users.controller.js';
 
 const router = Router();
@@ -19,5 +20,6 @@ router.get('/count', handleUserCount);
 router.get('/:id', handleGetUserById);
 router.delete('/:id', handleDeleteUser);
 router.patch('/:id', handleUpdateUser);
+router.patch('/:id/password', handleUpdatePassword);
 
 export default router;

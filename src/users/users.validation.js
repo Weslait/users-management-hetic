@@ -67,24 +67,23 @@ export function validateUpdateUser(userData) {
   return {
     ok: Object.keys(errors).length === 0,
     errors,
-    data: userData,
+    data: data,
   };
 }
 
-// F) Changer uniquement le mot de passe
 export function changeUserPassword(userData) {
   const errors = {};
-  const data = {};
+  const newPassword = {};
 
   if (userData.password !== undefined) {
     if (!isStrongPassword(userData.password))
       errors.password = 'Password is invalid';
-    else data.password = userData.password;
+    else newPassword.password = userData.password;
   }
 
   return {
     ok: Object.keys(errors).length === 0,
     errors,
-    data: userData,
+    data: newPassword,
   };
 }

@@ -7,7 +7,11 @@ import {
   updateUser,
   countUsers,
 } from './users.service.js';
-import { validateUser, validateUpdateUser } from './users.validation.js';
+import {
+  validateUser,
+  validateUpdateUser,
+  changeUserPassword,
+} from './users.validation.js';
 
 export async function handleCreateUser(req, res) {
   try {
@@ -161,6 +165,31 @@ export async function handleUserCount(req, res) {
     return res.status(200).json({ 'Users count': usersCount });
   } catch (error) {
     return res.status(500).json({ error: 'Could not retrieve users count' });
+  }
+}
+
+export async function handleUpdatePassword(req, res) {
+  try {
+    const { id } = req.params;
+
+    // Verify is user ID exist
+    const user = await getUsersById(id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const validation = changeUserPassword(req.body);
+
+    if (!validation.ok) {
+      return res.status(400).json({
+        message: 'Validation failed',
+        errors: validation.errors,
+      });
+    }
+    const updatedPassword = await updateUser(id, validation.data);
+    return res.status(200).json(updatedPassword);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
   }
 }
 
