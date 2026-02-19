@@ -22,7 +22,7 @@ function isStrongPassword(value) {
 
 export function validateUser(userData) {
   const errors = {};
-  const data = {};
+  const { email, password, name } = userData;
 
   if (userData.email !== undefined) {
     if (!isEmail(email)) errors.email = 'Email is invalid';
@@ -58,6 +58,24 @@ export function validateUpdateUser(userData) {
   if (userData.name !== undefined) {
     if (!isNotEmptyString(userData.name)) errors.name = 'Name is invalid';
     else data.name = userData.name;
+  }
+
+  return {
+    ok: Object.keys(errors).length === 0,
+    errors,
+    data: userData,
+  };
+}
+
+// F) Changer uniquement le mot de passe
+export function changeUserPassword(userData) {
+  const errors = {};
+  const data = {};
+
+  if (userData.password !== undefined) {
+    if (!isStrongPassword(userData.password))
+      errors.password = 'Password is invalid';
+    else data.password = userData.password;
   }
 
   return {
