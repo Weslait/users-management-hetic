@@ -21,4 +21,18 @@ export async function getUsersById(id) {
     where: { id },
   });
 }
+
+export async function deleteUser(id) {
+  return prisma.user.delete({
+    where: { id },
+  });
+}
+
+export async function updateUser(id, data) {
+  return prisma.user.update({
+    where: { id },
+    data,
+  });
+}
+
 // https://www.prisma.io/docs/orm/prisma-client/queries/crud#read

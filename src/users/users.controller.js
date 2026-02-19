@@ -4,8 +4,10 @@ import {
   findUserByEmail,
   listUsers,
   getUsersById,
+  deleteUser,
+  updateUser,
 } from './users.service.js';
-import { validateUser } from './users.validation.js';
+import { validateUser, validateUpdateUser } from './users.validation.js';
 
 export async function handleCreateUser(req, res) {
   try {
@@ -54,6 +56,58 @@ export async function handleGetUserById(req, res) {
     }
 
     return res.status(200).json(user);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+export async function handleDeleteUser(req, res) {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ message: 'Missing user ID' });
+    }
+
+    const user = await getUsersById(id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    await deleteUser(id);
+
+    return res.status(200).json({
+      message: 'User deleted successfully',
+    });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+
+export async function handleUpdateUser(req, res) {
+  try {
+    // Check if user ID exist
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ message: 'Missing user ID' });
+    }
+
+    // Verify is user ID exist
+    const user = await getUsersById(id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const results = validateUpdateUser(req.body);
+    if (!results.ok) {
+      return res.status(400).json({
+        message: 'Validation failed',
+        errors: results.errors,
+      });
+    }
+
+    const updatedUser = await updateUser(id, results.data);
+    return res.status(200).json(updateUser);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
