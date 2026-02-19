@@ -5,6 +5,7 @@ import {
   getUsersById,
   deleteUser,
   updateUser,
+  countUsers,
 } from './users.service.js';
 import { validateUser, validateUpdateUser } from './users.validation.js';
 
@@ -151,6 +152,15 @@ export async function handleSearchByEmail(req, res) {
     }
   } catch (error) {
     return res.status(500).json({ error: error.message });
+  }
+}
+
+export async function handleUserCount(req, res) {
+  try {
+    const usersCount = await countUsers();
+    return res.status(200).json({ 'Users count': usersCount });
+  } catch (error) {
+    return res.status(500).json({ error: 'Could not retrieve users count' });
   }
 }
 

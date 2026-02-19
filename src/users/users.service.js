@@ -77,4 +77,8 @@ export async function updateUser(id, data) {
   });
 }
 
+export async function countUsers() {
+  return prisma.user.count();
+}
+
 // https://www.prisma.io/docs/orm/prisma-client/queries/crud#read
